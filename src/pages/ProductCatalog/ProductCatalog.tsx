@@ -1,31 +1,15 @@
 import { Skeleton } from 'antd';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import ProductInfoModal from '../../components/ProductInfoModal/ProductInfoModal';
-import { fetchProducts } from '../../services/products';
+import { useGetProductsQuery } from '../../services/products';
 import { ProductType } from '../../types/productType';
 import styles from './ProductCatalog.module.css';
 
 const ProductCatalog: React.FC = () => {
-  const [products, setProducts] = useState<ProductType[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, error, isLoading } = useGetProductsQuery();
   const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
-
-  useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const response = await fetchProducts();
-        setProducts(response.data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getProducts();
-  }, []);
 
   const handleShowInfo = (product: ProductType) => {
     setSelectedProduct(product);
@@ -35,15 +19,6 @@ const ProductCatalog: React.FC = () => {
     setSelectedProduct(null);
   };
 
-  if (loading) {
-    return (
-      <div className={classNames(styles['product-grid'], 'container')}>
-        {[...Array(9)].map((_, index) => (
-          <Skeleton key={index} loading={true} active avatar paragraph={{ rows: 4 }} />
-        ))}
-      </div>
-    );
-  }
   const handleAddToCart = (product: ProductType) => {
     console.log('Added to cart:', product);
   };
@@ -52,10 +27,24 @@ const ProductCatalog: React.FC = () => {
     console.log('Removed from cart:', product);
   };
 
+  if (isLoading) {
+    return (
+      <div className={classNames(styles['product-grid'], 'container')}>
+        {[...Array(9)].map((_, index) => (
+          <Skeleton key={index} loading={true} active avatar paragraph={{ rows: 4 }} />
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>Error fetching products</div>;
+  }
+
   return (
     <div className={classNames(styles['product-grid'], 'container')}>
-      {products &&
-        products.map(product => (
+      {data &&
+        data.data.map((product: ProductType) => (
           <ProductCard
             onAddToCart={handleAddToCart}
             onRemoveFromCart={handleRemoveFromCart}

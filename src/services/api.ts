@@ -1,10 +1,17 @@
-import axios from 'axios';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const api = axios.create({
-  baseURL: 'http://localhost:1337',
-  headers: {
-    'Content-Type': 'application/json',
+const baseQuery = fetchBaseQuery({
+  baseUrl: 'http://localhost:1337',
+  prepareHeaders: headers => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+    return headers;
   },
 });
 
-export default api;
+export const api = createApi({
+  baseQuery,
+  endpoints: () => ({}),
+});

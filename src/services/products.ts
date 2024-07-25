@@ -1,14 +1,20 @@
-import api from './api';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-export const fetchProducts = async () => {
-  try {
-    const response = await api.get('/api/products?populate=*');
-    return response.data;
-  } catch (error: any) {
-    console.error('Error fetching products:', error);
-    if (error.response && error.response.status === 404) {
-      console.error('Products not found.');
-    }
-    throw error;
-  }
-};
+const baseQuery = fetchBaseQuery({
+  baseUrl: 'http://localhost:1337',
+});
+
+export const productsApi = createApi({
+  reducerPath: 'productsApi',
+  baseQuery,
+  endpoints: builder => ({
+    getProducts: builder.query<any, void>({
+      query: () => '/api/products?populate=*',
+    }),
+    getProductById: builder.query<any, string>({
+      query: id => `/api/products/${id}?populate=*`,
+    }),
+  }),
+});
+
+export const { useGetProductsQuery, useGetProductByIdQuery } = productsApi;
