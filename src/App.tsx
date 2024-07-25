@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
-import SignIn from './features/sign-in/SignIn';
-import SignUp from './features/sign-up/SignUp';
+import SignIn from './pages/SignIn/SignIn';
+import SignUp from './pages/SignUp/SignUp';
 
 function App() {
   return (
