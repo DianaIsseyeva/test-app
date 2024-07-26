@@ -38,7 +38,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onShowInfo, showActi
       try {
         await addToCart({ userId: authData?.id, productId: product.id }).unwrap();
         message.success('Item added to cart!');
-        onCartChange && onCartChange(); // Обновляем корзину
+        onCartChange && onCartChange();
       } catch (error) {
         message.error('Failed to add item to cart.');
       }
@@ -49,7 +49,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onShowInfo, showActi
     try {
       await removeFromCart({ userId: authData?.id, productId: product.id }).unwrap();
       message.success('Item removed from cart!');
-      onCartChange && onCartChange(); // Обновляем корзину
+      onCartChange && onCartChange();
     } catch (error) {
       message.error('Failed to remove item from cart.');
     }

@@ -48,7 +48,7 @@ const CartProductCard: React.FC<CartProductCardProps> = ({ product, onShowInfo, 
     try {
       await removeFromCart({ userId: authData?.id, productId: product.id }).unwrap();
       message.success('Item removed from cart!');
-      onCartChange && onCartChange(); // Обновляем корзину
+      onCartChange && onCartChange();
     } catch (error) {
       message.error('Failed to remove item from cart.');
     }

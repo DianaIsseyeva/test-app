@@ -22,7 +22,7 @@ export const authApi = createApi({
         body: user,
       }),
     }),
-    login: builder.mutation<any, { email: string; password: string }>({
+    login: builder.mutation<any, { identifier: string; password: string }>({
       query: credentials => ({
         url: '/api/auth/local',
         method: 'POST',
