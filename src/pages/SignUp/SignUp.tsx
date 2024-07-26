@@ -40,7 +40,7 @@ const SignUp: React.FC = () => {
       if (result && result.jwt) {
         localStorage.setItem('token', result.jwt);
         message.success('Registration successful!');
-        navigate('/products');
+        navigate('/');
       } else {
         throw new Error('Registration failed');
       }

@@ -1,4 +1,4 @@
-import { DeleteOutlined, InfoCircleOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Card, message } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -48,7 +48,7 @@ const CartProductCard: React.FC<CartProductCardProps> = ({ product, onShowInfo, 
     try {
       await removeFromCart({ userId: authData?.id, productId: product.id }).unwrap();
       message.success('Item removed from cart!');
-      onCartChange && onCartChange(); // Обновляем корзину
+      onCartChange && onCartChange();
     } catch (error) {
       message.error('Failed to remove item from cart.');
     }
@@ -68,7 +68,6 @@ const CartProductCard: React.FC<CartProductCardProps> = ({ product, onShowInfo, 
       actions={
         showActions
           ? [
-              <InfoCircleOutlined key='info' onClick={() => onShowInfo(product)} />,
               <ShoppingCartOutlined key='add' onClick={handleAddToCart} />,
               <DeleteOutlined key='remove' onClick={handleRemoveFromCart} />,
             ]

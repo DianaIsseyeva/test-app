@@ -1,7 +1,6 @@
 import { Button, Form, Input, message } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../App.css';
 import { useLoginMutation } from '../../services';
 
 const formItemLayout = {
@@ -36,12 +35,16 @@ const SignIn: React.FC = () => {
   const onFinish = async (values: any) => {
     try {
       const { email, password } = values;
-      const { data } = await login({ email: email, password }).unwrap();
-      localStorage.setItem('token', data.jwt);
-      message.success('Login successful!');
-      navigate('/products');
+      const result = await login({ identifier: email, password }).unwrap();
+      if (result && result.jwt) {
+        localStorage.setItem('token', result.jwt);
+        message.success('Login successful!');
+        navigate('/');
+      } else {
+        throw new Error('Login failed');
+      }
     } catch (error) {
-      message.error('Login failed. Please check your email and password.');
+      message.error('Login failed. Please try again.');
     }
   };
 
@@ -50,9 +53,8 @@ const SignIn: React.FC = () => {
       <Form
         {...formItemLayout}
         form={form}
-        name='register'
+        name='login'
         onFinish={onFinish}
-        initialValues={{ prefix: '86' }}
         style={{ maxWidth: 600 }}
         scrollToFirstError
       >
@@ -86,9 +88,10 @@ const SignIn: React.FC = () => {
         >
           <Input.Password />
         </Form.Item>
+
         <Form.Item {...tailFormItemLayout}>
           <Button type='primary' htmlType='submit' loading={isLoading}>
-            Sign in
+            Sign In
           </Button>
         </Form.Item>
       </Form>

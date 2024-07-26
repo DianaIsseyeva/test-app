@@ -63,6 +63,16 @@ The application connects to a WebSocket server to receive real-time updates for 
 - Product updated
 - Product deleted
 
+# Technologies Used
+
+This project leverages a variety of modern technologies and libraries to ensure a robust and efficient development process. Below are the key dependencies and their purposes:
+
+- RTK Query: A powerful data fetching and caching tool built on top of Redux Toolkit.
+- Ant Design: A comprehensive UI component library based on Ant Design specifications, providing pre-designed components for faster UI development.
+- Axios: A promise-based HTTP client for making requests to the Strapi backend.
+- Socket.io-client: A library for real-time, bidirectional and event-based communication between the browser and the server using WebSockets.
+- Typescript: A typed superset of JavaScript that compiles to plain JavaScript, adding static types for better development experience.
+
 # License
 
 This project is licensed under the MIT License.

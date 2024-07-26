@@ -5,20 +5,20 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import ProductInfoModal from '../../components/ProductInfoModal/ProductInfoModal';
 import { useCheckAuthQuery, useGetCartQuery } from '../../services';
 import { useGetProductsQuery } from '../../services/products';
-import { ProductType } from '../../types/productType';
 import socket from '../../services/socket';
+import { ProductType } from '../../types/productType';
 import styles from './ProductCatalog.module.css';
 
 const ProductCatalog: React.FC = () => {
   const { data, error, isLoading, refetch: refetchProducts } = useGetProductsQuery();
-  const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
 
-  const handleShowInfo = (product: ProductType) => {
-    setSelectedProduct(product);
+  const handleShowInfo = (productId: number) => {
+    setSelectedProductId(productId);
   };
 
   const handleCloseModal = () => {
-    setSelectedProduct(null);
+    setSelectedProductId(null);
   };
   const token = localStorage.getItem('token');
   const { data: authData, error: authError } = useCheckAuthQuery(undefined, {
@@ -66,7 +66,9 @@ const ProductCatalog: React.FC = () => {
         data.data.map((product: ProductType) => (
           <ProductCard key={product.id} product={product} onShowInfo={handleShowInfo} onCartChange={handleCartChange} />
         ))}
-      <ProductInfoModal visible={!!selectedProduct} product={selectedProduct} onClose={handleCloseModal} />
+      {selectedProductId !== null && (
+        <ProductInfoModal visible={!!selectedProductId} productId={selectedProductId} onClose={handleCloseModal} />
+      )}
     </div>
   );
 };

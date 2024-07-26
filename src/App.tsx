@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { store } from './app/store';
+import Cart from './components/Cart/Cart';
+import AppLayout from './components/Layout/Layout';
 import ProductCatalog from './pages/ProductCatalog/ProductCatalog';
 import SignIn from './pages/SignIn/SignIn';
 import SignUp from './pages/SignUp/SignUp';
-import AppLayout from './components/Layout/Layout';
-import socket from './services/socket';
-import { useGetCartQuery } from './services/cart';
 import { useCheckAuthQuery } from './services';
-import Cart from './components/Cart/Cart';
+import { useGetCartQuery } from './services/cart';
+import socket from './services/socket';
 
 const App = () => {
   const isAuthenticated = !!localStorage.getItem('token');
-
+  console.log(isAuthenticated);
   const token = localStorage.getItem('token');
   const { data: authData } = useCheckAuthQuery(undefined, {
     skip: !token,
@@ -49,19 +49,14 @@ const App = () => {
       <Router>
         <AppLayout>
           <Routes>
-            {!isAuthenticated ? (
-              <>
-                <Route path='/sign-in' element={<SignIn />} />
-                <Route path='/sign-up' element={<SignUp />} />
-                <Route path='*' element={<Navigate to='/sign-in' />} />
-              </>
-            ) : (
-              <>
-                <Route path='/products' element={<ProductCatalog />} />
-                <Route path='/cart' element={<Cart />} />
-                <Route path='*' element={<Navigate to='/products' />} />
-              </>
-            )}
+            <>
+              <Route path='/sign-in' element={<SignIn />} />
+              <Route path='/sign-up' element={<SignUp />} />
+              <Route path='*' element={<Navigate to='/products' replace />} />
+              <Route path='/products' element={<ProductCatalog />} />
+              <Route path='/cart' element={<Cart />} />
+              <Route path='*' element={<Navigate to='/products' replace />} />
+            </>
           </Routes>
         </AppLayout>
       </Router>
