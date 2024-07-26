@@ -11,7 +11,7 @@ export const productsApi = createApi({
     getProducts: builder.query<any, void>({
       query: () => '/api/products?populate=*',
     }),
-    getProductById: builder.query<any, string>({
+    getProductById: builder.query<any, number>({
       query: id => `/api/products/${id}?populate=*`,
     }),
   }),

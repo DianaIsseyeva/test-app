@@ -8,7 +8,7 @@ import { ProductType } from '../../types/productType';
 
 interface ProductCardProps {
   product: ProductType;
-  onShowInfo: (product: ProductType) => void;
+  onShowInfo: (productId: number) => void;
   showActions?: boolean;
   onCartChange?: () => void;
 }
@@ -69,7 +69,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onShowInfo, showActi
       actions={
         showActions
           ? [
-              <InfoCircleOutlined key='info' onClick={() => onShowInfo(product)} />,
+              <InfoCircleOutlined key='info' onClick={() => onShowInfo(product.id)} />,
               <ShoppingCartOutlined key='add' onClick={handleAddToCart} />,
               <DeleteOutlined key='remove' onClick={handleRemoveFromCart} />,
             ]
