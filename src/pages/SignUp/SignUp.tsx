@@ -1,5 +1,8 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../../App.css';
+import { useRegisterMutation } from '../../services';
 
 const formItemLayout = {
   labelCol: {
@@ -20,16 +23,30 @@ const tailFormItemLayout = {
     },
     sm: {
       span: 16,
-      offset: 8,
     },
+    offset: 8,
   },
 };
 
 const SignUp: React.FC = () => {
   const [form] = Form.useForm();
+  const [register, { isLoading }] = useRegisterMutation();
+  const navigate = useNavigate();
 
-  const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
+  const onFinish = async (values: any) => {
+    try {
+      const { username, email, password } = values;
+      const result = await register({ username, email, password }).unwrap();
+      if (result && result.jwt) {
+        localStorage.setItem('token', result.jwt);
+        message.success('Registration successful!');
+        navigate('/products');
+      } else {
+        throw new Error('Registration failed');
+      }
+    } catch (error) {
+      message.error('Registration failed. Please try again.');
+    }
   };
 
   return (
@@ -77,13 +94,18 @@ const SignUp: React.FC = () => {
               required: true,
               message: 'Please input your password!',
             },
+            {
+              min: 6,
+              message: 'Password must be at least 6 characters long!',
+            },
           ]}
           hasFeedback
         >
           <Input.Password />
         </Form.Item>
+
         <Form.Item {...tailFormItemLayout}>
-          <Button type='primary' htmlType='submit'>
+          <Button type='primary' htmlType='submit' loading={isLoading}>
             Register
           </Button>
         </Form.Item>

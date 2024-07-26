@@ -1,5 +1,8 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../../App.css';
+import { useLoginMutation } from '../../services';
 
 const formItemLayout = {
   labelCol: {
@@ -11,6 +14,7 @@ const formItemLayout = {
     sm: { span: 16 },
   },
 };
+
 const tailFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -26,9 +30,19 @@ const tailFormItemLayout = {
 
 const SignIn: React.FC = () => {
   const [form] = Form.useForm();
+  const [login, { isLoading }] = useLoginMutation();
+  const navigate = useNavigate();
 
-  const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
+  const onFinish = async (values: any) => {
+    try {
+      const { email, password } = values;
+      const { data } = await login({ email: email, password }).unwrap();
+      localStorage.setItem('token', data.jwt);
+      message.success('Login successful!');
+      navigate('/products');
+    } catch (error) {
+      message.error('Login failed. Please check your email and password.');
+    }
   };
 
   return (
@@ -73,7 +87,7 @@ const SignIn: React.FC = () => {
           <Input.Password />
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
-          <Button type='primary' htmlType='submit'>
+          <Button type='primary' htmlType='submit' loading={isLoading}>
             Sign in
           </Button>
         </Form.Item>
