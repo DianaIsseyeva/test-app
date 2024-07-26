@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:1337',
+  baseUrl: 'http://localhost:1337/api',
   prepareHeaders: headers => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -16,20 +16,20 @@ export const cartApi = createApi({
   baseQuery,
   endpoints: builder => ({
     getCart: builder.query<any, string>({
-      query: userId => `/api/users/${userId}?populate=cart`,
+      query: userId => `/users/${userId}?populate=cart,cart.image`,
     }),
-    addToCart: builder.mutation<any, { userId: string; productId: string }>({
+    addToCart: builder.mutation<any, { userId: string; productId: number }>({
       query: ({ userId, productId }) => ({
-        url: `/api/users/${userId}`,
-        method: 'PUT',
-        body: { cart: [productId] },
+        url: `/cart/add`,
+        method: 'POST',
+        body: { userId, productId },
       }),
     }),
-    removeFromCart: builder.mutation<any, { userId: string; productId: string }>({
+    removeFromCart: builder.mutation<any, { userId: string; productId: number }>({
       query: ({ userId, productId }) => ({
-        url: `/api/users/${userId}`,
-        method: 'PUT',
-        body: { cart: { disconnect: [productId] } },
+        url: `/cart/remove`,
+        method: 'POST',
+        body: { userId, productId },
       }),
     }),
   }),

@@ -36,7 +36,7 @@ const SignIn: React.FC = () => {
   const onFinish = async (values: any) => {
     try {
       const { email, password } = values;
-      const { data } = await login({ identifier: email, password }).unwrap();
+      const { data } = await login({ email: email, password }).unwrap();
       localStorage.setItem('token', data.jwt);
       message.success('Login successful!');
       navigate('/products');

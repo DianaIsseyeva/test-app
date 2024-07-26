@@ -4,17 +4,17 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCheckAuthQuery } from '../../services/auth';
 import { useAddToCartMutation, useRemoveFromCartMutation } from '../../services/cart';
-import { ProductType } from '../../types/productType';
+import { CartProductType } from '../../types/cartProductType';
 
-interface ProductCardProps {
-  product: ProductType;
-  onShowInfo: (product: ProductType) => void;
+interface CartProductCardProps {
+  product: CartProductType;
+  onShowInfo: (product: CartProductType) => void;
   showActions?: boolean;
   onCartChange?: () => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onShowInfo, showActions = true, onCartChange }) => {
-  const { title, image } = product.attributes;
+const CartProductCard: React.FC<CartProductCardProps> = ({ product, onShowInfo, showActions = true, onCartChange }) => {
+  const { title, price, image } = product;
   const navigate = useNavigate();
   const { data: authData, error: authError } = useCheckAuthQuery(undefined, {
     skip: !localStorage.getItem('token'),
@@ -38,7 +38,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onShowInfo, showActi
       try {
         await addToCart({ userId: authData?.id, productId: product.id }).unwrap();
         message.success('Item added to cart!');
-        onCartChange && onCartChange(); // Обновляем корзину
       } catch (error) {
         message.error('Failed to add item to cart.');
       }
@@ -60,8 +59,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onShowInfo, showActi
       hoverable
       style={{ width: 240 }}
       cover={
-        image.data.length > 0 ? (
-          <img alt={title} src={`http://localhost:1337${image.data[0].attributes.url}`} />
+        image.length > 0 ? (
+          <img alt={title} src={`http://localhost:1337${image[0].url}`} />
         ) : (
           <div>No Image Available</div>
         )
@@ -76,9 +75,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onShowInfo, showActi
           : undefined
       }
     >
-      <Card.Meta title={title} />
+      <Card.Meta title={title} description={`Price: $${price}`} />
     </Card>
   );
 };
 
-export default ProductCard;
+export default CartProductCard;

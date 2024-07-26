@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import React, { useState } from 'react';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import ProductInfoModal from '../../components/ProductInfoModal/ProductInfoModal';
+import { useCheckAuthQuery, useGetCartQuery } from '../../services';
 import { useGetProductsQuery } from '../../services/products';
 import { ProductType } from '../../types/productType';
 import styles from './ProductCatalog.module.css';
@@ -18,13 +19,18 @@ const ProductCatalog: React.FC = () => {
   const handleCloseModal = () => {
     setSelectedProduct(null);
   };
+  const token = localStorage.getItem('token');
+  const { data: authData, error: authError } = useCheckAuthQuery(undefined, {
+    skip: !token,
+  });
 
-  const handleAddToCart = (product: ProductType) => {
-    console.log('Added to cart:', product);
-  };
+  const userId = authData?.id;
+  const { refetch } = useGetCartQuery(userId, {
+    skip: !userId,
+  }); // Add your userId here or get it dynamically
 
-  const handleRemoveFromCart = (product: ProductType) => {
-    console.log('Removed from cart:', product);
+  const handleCartChange = () => {
+    refetch();
   };
 
   if (isLoading) {
@@ -46,11 +52,10 @@ const ProductCatalog: React.FC = () => {
       {data &&
         data.data.map((product: ProductType) => (
           <ProductCard
-            onAddToCart={handleAddToCart}
-            onRemoveFromCart={handleRemoveFromCart}
             key={product.id}
             product={product}
             onShowInfo={handleShowInfo}
+            onCartChange={handleCartChange} // Передаем функцию обновления корзины
           />
         ))}
       <ProductInfoModal visible={!!selectedProduct} product={selectedProduct} onClose={handleCloseModal} />
