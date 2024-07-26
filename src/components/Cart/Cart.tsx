@@ -4,6 +4,7 @@ import CartProductCard from '../../components/CartProductCard/CartProductCard';
 import { useCheckAuthQuery } from '../../services/auth';
 import { useGetCartQuery } from '../../services/cart';
 import { CartProductType } from '../../types/cartProductType';
+import socket from '../../services/socket';
 
 const { Content } = Layout;
 
@@ -36,6 +37,18 @@ const Cart: React.FC = () => {
       message.error('Failed to fetch cart data.');
     }
   }, [error]);
+
+  useEffect(() => {
+    socket.on('productCreated', refetch);
+    socket.on('productUpdated', refetch);
+    socket.on('productDeleted', refetch);
+
+    return () => {
+      socket.off('productCreated', refetch);
+      socket.off('productUpdated', refetch);
+      socket.off('productDeleted', refetch);
+    };
+  }, [refetch]);
 
   if (isLoading) {
     return (

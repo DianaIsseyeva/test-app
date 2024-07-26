@@ -1,46 +1,68 @@
-# Getting Started with Create React App
+## Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.
+This is the frontend for a simple PWA application built using the React framework. The application includes a product catalog, user registration, login, and a shopping cart. The backend is implemented using Strapi.
 
-## Available Scripts
+## Requirements
 
-In the project directory, you can run:
+- Node.js
+- npm (or yarn)
 
-### `npm start`
+# Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Installation
+Clone the repository and install the dependencies:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+git clone https://github.com/DianaIsseyeva/test-app.git
+cd test-app
+npm install
+```
 
-### `npm test`
+# Running the Application
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To start the application, use the following command:
 
-### `npm run build`
+```bash
+npm start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This will run the app in development mode. Open http://localhost:3000 to view it in your browser.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Building for Production
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To build the app for production, use:
 
-### `npm run eject`
+```bash
+npm run build
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This will create a build directory with the production build of your app.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Features
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## User Authentication
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Register: Users can create an account with a username, email, and password.
+- Login: Registered users can log in to access their shopping cart and other features.
 
-## Learn More
+## Product Catalog
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Displays a list of available products with details such as title, price, and image.
+- Product info window: Detailed view of a selected product.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Shopping Cart
+
+- Users can add and remove products from their shopping cart.
+- The cart is updated in real-time using WebSocket.
+
+## WebSocket Integration
+
+The application connects to a WebSocket server to receive real-time updates for the following events:
+
+- Product created
+- Product updated
+- Product deleted
+
+# License
+
+This project is licensed under the MIT License.
