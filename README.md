@@ -1,6 +1,6 @@
 ## Overview
 
-This is the frontend for a simple PWA application built using the React framework. The application includes a product catalog, user registration, login, and a shopping cart. The backend is implemented using Strapi.
+This is the frontend for an application built using the React framework. The application includes a product catalog, user registration, login, and a shopping cart. The backend is implemented using Strapi.
 
 ## Requirements
 
